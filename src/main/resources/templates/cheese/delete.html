@@ -9,10 +9,19 @@
 <p th:unless="${cheeses} and ${cheeses.size()}"> no cheese :(</p>
 
 
-
-<ul th:each="cheese : ${cheeses}">
-    <li th:text="${cheese.key + ' - ' + cheese.value}"></li>
+<form method="post">
+<ul th:each="cheese : ${cheeses}" >
+    <li th:text="${cheese.key + ' - ' + cheese.value}"></li><input id="checkid" type="checkbox" name="remove" th:value="${cheese.key}"/>
 </ul>
+
+    <input type="submit" value="Remove Cheese">
+
+
+
+
+
+</form>
+
 
 </body>
 </html>

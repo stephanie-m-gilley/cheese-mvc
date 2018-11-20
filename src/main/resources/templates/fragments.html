@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="hhtp://www.thymeleaf.org/">
+<head th:fragment="head">
+    <meta charset="UTF-8"/>
+    <title th:text="${title}">My Cheeses</title>
+
+    <link rel="stylesheet" th:href="@{/css/styles.css}" />
+    <script type="text/javascript" th:src="@{/js/script.js}"></script>
+</head>
+<body>
+
+<nav th:fragment="navigation">  &nbsp;
+    <a href="/cheese">List</a>  &nbsp;&nbsp;
+    <a href="/cheese/add">Add</a>   &nbsp;&nbsp;
+    <a href="/cheese/delete">Remove Cheese</a>
+</nav>
+
+</body>
+</html>
