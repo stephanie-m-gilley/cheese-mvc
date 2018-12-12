@@ -1,81 +1,96 @@
 package org.launchcode.cheesemvc.controllers;
 
 
+
+import org.launchcode.cheesemvc.models.Cheese;
+import org.launchcode.cheesemvc.models.CheeseData;
+import org.launchcode.cheesemvc.models.CheeseType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.validation.Errors;
+import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import javax.validation.Valid;
 
 
 @Controller
 @RequestMapping("cheese")
 public class CheeseController {
 
-    static HashMap<String, String> cheeses = new HashMap<>();
-    static ArrayList<String> cheese = new ArrayList<>();
-
-    // request path : /cheese
+    // Request path: /cheese
     @RequestMapping(value = "")
     public String index(Model model) {
-
-        model.addAttribute("cheeses", cheeses);
+        model.addAttribute("cheeses", CheeseData.getAll());
         model.addAttribute("title", "My Cheeses");
-
         return "cheese/index";
     }
 
     @RequestMapping(value = "add", method = RequestMethod.GET)
     public String displayAddCheeseForm(Model model) {
         model.addAttribute("title", "Add Cheese");
-
+        model.addAttribute(new Cheese());
+        model.addAttribute("cheeseTypes", CheeseType.values());
         return "cheese/add";
     }
 
     @RequestMapping(value = "add", method = RequestMethod.POST)
-    public String processAddCheeseForm(@RequestParam String cheeseName, String cheeseDescription) {
+    public String processAddCheeseForm(@ModelAttribute @Valid Cheese newCheese,
+                                       Errors errors, Model model) {
 
+        if (errors.hasErrors()) {
+            model.addAttribute("title", "Add Cheese");
+            return "cheese/add";
+        }
 
-        cheeses.put(cheeseName, cheeseDescription);
+        CheeseData.add(newCheese);
 
-
-        //redirect to /cheese
         return "redirect:";
     }
 
     @RequestMapping(value = "delete", method = RequestMethod.GET)
-    public String deleteCheeseForm(Model model) {
-
-        model.addAttribute("cheeses", cheeses);
-        model.addAttribute("title", "Remove Cheeses");
-
+    public String displayRemoveCheeseForm(Model model) {
+        model.addAttribute("cheeses", CheeseData.getAll());
+        model.addAttribute("title", "Remove Cheese");
         return "cheese/delete";
-
-        //TODO make a post request handler, mimic add request handler. compare arraylist to hashmap by looping through and comparing. Will need an if statement
     }
 
     @RequestMapping(value = "delete", method = RequestMethod.POST)
-    public String processDeleteCheeseForm(@RequestParam String remove) {
+    public String processRemoveCheeseForm(@RequestParam int[] cheeseIds) {
 
-        cheese.add(remove);
-
-        for (String i : cheese) {
-            if (cheeses.containsKey(i)) {
-                cheeses.remove(remove);
-            }
+        for (int cheeseId : cheeseIds) {
+            CheeseData.remove(cheeseId);
         }
 
-        return "redirect:";
 
+
+        return "redirect:";
+    }
+
+    @RequestMapping(value = "edit/{cheeseId}", method = RequestMethod.GET)
+    public String displayEditForm(@PathVariable int cheeseId, Model model) {
+
+
+        model.addAttribute("cheese", CheeseData.getById(cheeseId));
+        model.addAttribute("title", "Edit Cheese");
+        model.addAttribute("cheeseTypes", CheeseType.values());
+
+
+
+        return "/cheese/edit";
     }
 
 
+    @RequestMapping(value = "edit/{cheeseId}", method = RequestMethod.POST)
+    public String processEditForm(int cheeseID, String name, String description) {
+
+
+        return "/cheese/edit";
+    }
+
 }
+
+
+
 
 
 
