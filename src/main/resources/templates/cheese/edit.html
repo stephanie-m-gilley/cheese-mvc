@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org/">
 <head th:replace="fragments :: head"></head>
 <body class="container">
-<h1 th:text="${title}">Default Title</h1>
+<h1 th:text="${cheese.name} + ' ' +  ${cheese.cheeseId}"></h1>
 
 <nav th:replace="fragments :: navigation"></nav>
 
@@ -25,6 +25,12 @@
                     th:text="${cheeseType.name}"
                     th:value="${cheeseType}"></option>
         </select>
+    </div>
+
+    <div class="form-group">
+        <label th:for="rating">Rating</label>
+        <input class="form-control" th:field="*{rating}" />
+        <span th:errors="*{rating}" class="error"></span>
     </div>
 
     <input type="submit" value="Add Cheese" />

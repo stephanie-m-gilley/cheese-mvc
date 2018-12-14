@@ -1,10 +1,18 @@
 package org.launchcode.cheesemvc.models;
 
 
+import org.hibernate.validator.constraints.Range;
+
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 public class Cheese {
+
+
+    @NotNull
+    @Range(min=1, max=5)
+    private int rating;
+
 
     @NotNull //throws error if a name is not entered in name field
     @Size(min=3, max=15)
@@ -29,6 +37,8 @@ public class Cheese {
         cheeseId = nextId;
         nextId++;
     }
+
+
 
     public int getCheeseId() {
         return cheeseId;
@@ -60,5 +70,13 @@ public class Cheese {
 
     public void setType(CheeseType type) {
         this.type = type;
+    }
+
+    public int getRating() {
+        return rating;
+    }
+
+    public void setRating(int rating) {
+        this.rating = rating;
     }
 }
